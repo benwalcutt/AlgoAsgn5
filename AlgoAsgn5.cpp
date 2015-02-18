@@ -34,6 +34,23 @@ class Vertex {
 		}
 };
 
+double find_distance(Vertex A, Vertex B) {
+	double distanceX = 0.0;
+	double distanceY = 0.0;
+	double distance = 0.0;
+	
+	distanceX = A.get_X() - B.get_X();
+	distanceX = pow(distanceX, 2.0);
+		
+	distanceY = A.get_Y() - B.get_Y();
+	distanceY = pow(distanceY, 2.0);
+		
+	distance = distanceX + distanceY;
+	distance = pow(distance, 0.5);
+	
+	return distance;
+}
+
 double find_path(Vertex * graph, int size) {
 	double result = 0;
 	double * dist_table;
@@ -51,16 +68,7 @@ double find_path(Vertex * graph, int size) {
 	
 	// initialize distance table (just easier this way)
 	for (int i = 1; i < size; i++) {
-		distanceX = graph[0].get_X() - graph[i].get_X();
-		distanceX = pow(distanceX, 2.0);
-		
-		distanceY = graph[0].get_Y() - graph[i].get_Y();
-		distanceY = pow(distanceY, 2.0);
-		
-		distance = distanceX + distanceY;
-		distance = pow(distance, 0.5);
-		
-		dist_table[i] = distance;
+		dist_table[i] = find_distance(graph[0], graph[i]);
 	}
 	
 	// given a table of distances from the frontier, find the lowest, add it to the group and recalc distances
@@ -90,15 +98,7 @@ double find_path(Vertex * graph, int size) {
 		// recalculate table
 		for (int j = 0; j < size; j++) {
 			if (graph[j].get_assigned() == false) {
-				distanceX = graph[lowest_index].get_X() - graph[j].get_X();
-				distanceX = pow(distanceX, 2.0);
-		
-				distanceY = graph[lowest_index].get_Y() - graph[j].get_Y();
-				distanceY = pow(distanceY, 2.0);
-		
-				distance = distanceX + distanceY;
-				distance = pow(distance, 0.5);
-				
+				distance = find_distance(graph[lowest_index], graph[j]);
 				if (distance < dist_table[j]) {
 					dist_table[j] = distance;
 				}
